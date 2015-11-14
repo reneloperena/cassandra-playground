@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import rene.playground.cassandra.persistence.EventDAO;
 import rene.playground.cassandra.persistence.EventDAOImpl;
@@ -26,6 +27,8 @@ public class MovieInformationResourceImpl implements MovieInformationResource{
 	 * @see rene.playground.cassandra.resources.MovieInformationResource#getMovieInformationBetweenDates(java.lang.String, java.util.Date, java.util.Date)
 	 */
 	public Response getMovieInformationBetweenDates(String movie, String startDate, String endDate){
+		
+		if(movie == null || startDate == null || endDate == null) return Response.status(Status.BAD_REQUEST).build();
 		
 		LocalDateTime startLocalDate = LocalDateTime.parse(startDate, formatter);
 		LocalDateTime endLocalDate = LocalDateTime.parse(endDate, formatter);
