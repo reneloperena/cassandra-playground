@@ -97,7 +97,8 @@ public class EventDAOImpl implements EventDAO {
 				startDateTime.getDayOfMonth());
 		LocalDate endDate = LocalDate.of(endDateTime.getYear(), endDateTime.getMonth(), endDateTime.getDayOfMonth());
 		// Gets the range of months between both dates
-		int months = Period.between(startDate, endDate).getMonths() + 1;
+		Period period = Period.between(startDate, endDate);
+		int months = (period.getMonths() + 1)+(period.getYears()*12);
 		// Creates an array list with expected size to avoid resizing
 		List<Statement> statements = Lists.newArrayListWithExpectedSize(months);
 		// For each one of the buckets, will create a statement
