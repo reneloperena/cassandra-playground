@@ -35,7 +35,7 @@ public class EventDAOImpl implements EventDAO {
 
 	private String table = "events_by_hour";
 
-	private Cluster cluster = Cluster.builder().addContactPoint("10.0.1.26").build();
+	private Cluster cluster = Cluster.builder().addContactPoint(System.getenv().get("CASSANDRA_IP")).build();
 
 	private Session session = cluster.connect(keyspace);
 
