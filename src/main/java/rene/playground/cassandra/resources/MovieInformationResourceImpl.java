@@ -1,9 +1,11 @@
 package rene.playground.cassandra.resources;
 
+import java.net.HttpURLConnection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -28,8 +30,13 @@ public class MovieInformationResourceImpl implements MovieInformationResource{
 	 */
 	public Response getMovieInformationBetweenDates(String movie, String startDate, String endDate){
 		
-		if(movie == null || startDate == null || endDate == null) return Response.status(Status.BAD_REQUEST).build();
-		
+		if(movie == null || startDate == null || endDate == null) {
+			throw new WebApplicationException(
+			      Response.status(HttpURLConnection.HTTP_BAD_REQUEST)
+			        .entity("All parameters are mandatory")
+			        .build()
+			    );
+		}
 		LocalDateTime startLocalDate = LocalDateTime.parse(startDate, formatter);
 		LocalDateTime endLocalDate = LocalDateTime.parse(endDate, formatter);
 		
