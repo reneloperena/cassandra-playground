@@ -6,9 +6,10 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ResultSet;
@@ -29,15 +30,20 @@ import rx.schedulers.Schedulers;
  * @author Rene Loperena <rene@vuh.io>
  *
  */
+@Component
 public class EventDAOImpl implements EventDAO {
 	
-	private String keyspace = "analytics";
+	@Value("${table.name}")
+	private String table;
+	
+	@Value("${keyspace}")
+	private String keyspace;
 
-	private String table = "events_by_hour";
+	@Autowired
+	private Cluster cluster;
 
-	private Cluster cluster = Cluster.builder().addContactPoint(System.getenv().get("CASSANDRA_IP")).build();
-
-	private Session session = cluster.connect(keyspace);
+	@Autowired
+	private Session session;
 
 	/*
 	 * (non-Javadoc)
@@ -156,4 +162,21 @@ public class EventDAOImpl implements EventDAO {
 			futures.add(session.executeAsync(query.toString()));
 		return futures;
 	}
+
+	public void setTable(String table) {
+		this.table = table;
+	}
+
+	public void setKeyspace(String keyspace) {
+		this.keyspace = keyspace;
+	}
+
+	public void setCluster(Cluster cluster) {
+		this.cluster = cluster;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
+	}
+	
 }
